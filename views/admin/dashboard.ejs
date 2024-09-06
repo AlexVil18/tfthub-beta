@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - TFTHub</title>
+    <link rel="stylesheet" href="/styles/admin.css">
+</head>
+<body>
+    <header>
+        <h1>Panel de Administración</h1>
+        <div class="header-container">
+            <a href="/admin/dashboard" class="nav-button">Dashboard</a>
+            <a href="/admin/news" class="nav-button">Noticias</a>
+            <a href="/admin/compos" class="nav-button">Compos</a>
+            <a href="/admin/guides" class="nav-button">Guías</a>
+            <a href="/admin/settings" class="nav-button">Configuraciones</a>
+            <a href="/admin/change-credentials" class="nav-button change-credentials">Modificar credenciales</a>
+            <a href="/admin/logout" class="nav-button logout">Cerrar sesión</a>
+        </div>
+    </header>
+    <main>
+        <div class="dashboard-container">
+            <h1>Bienvenido al Panel de Administración</h1>
+            <div class="dashboard-content">
+                <div class="card">
+                    <h3>Gestionar Noticias</h3>
+                    <p>Administra las noticias y actualizaciones de TFT. Aquí puedes agregar, editar o eliminar noticias.</p>
+                    <a href="/admin/news" class="nav-button">Ir a Noticias</a>
+                </div>
+                <div class="card">
+                    <h3>Gestionar Compos</h3>
+                    <p>Agrega, edita o elimina compos. Mantén al día las composiciones del juego.</p>
+                    <a href="/admin/compos" class="nav-button">Ir a Compos</a>
+                </div>
+                <div class="card">
+                    <h3>Gestionar Guías</h3>
+                    <p>Administra las guías y tutoriales de TFT. Aquí puedes agregar, editar o eliminar guías.</p>
+                    <a href="/admin/guides" class="nav-button">Ir a Guías</a>
+                </div>
+                <div class="card">
+                    <h3>Configuraciones</h3>
+                    <p>Configura categorías, ajustes del sitio y otros parámetros importantes.</p>
+                    <a href="/admin/settings" class="nav-button">Ir a Configuraciones</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 TFTHub. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

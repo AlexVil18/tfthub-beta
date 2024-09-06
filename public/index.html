@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFTHub</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="compos.html">Compos</a></li>
+                <li><a href="/guias">Guías</a></li> <!-- Cambiado a /guias -->
+                <li><a href="redes.html">Redes</a></li>
+            </ul>
+        </nav>
+        <div class="logo-titulo">
+            <img src="logo.png" alt="Logo TFTHub" class="logo">
+            <div class="titulo-bienvenida">
+                <h1>Bienvenido a TFTHub</h1>
+                <p>Tu lugar por excelencia para contenido de TFT</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="noticias">
+            <h2>Últimas Noticias</h2>
+            <div id="news-container" class="cards-container">
+                <!-- News cards will be dynamically inserted here -->
+            </div>
+            <button onclick="location.href='noticias.html'" class="btn">Ver todas las noticias</button>
+        </section>
+
+        <section id="compos">
+            <h2>Compos Recomendadas</h2>
+            <div id="compos-container" class="cards-container">
+                <!-- Compos cards will be dynamically inserted here -->
+            </div>
+            <button onclick="location.href='compos.html'" class="btn">Ver todas las compos</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 TFTHub. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('news:update', () => {
+            loadLatestNews(); // Function to refresh latest news from server
+        });
+
+        socket.on('compos:update', () => {
+            loadCompos(); // Function to refresh compos from server
+        });
+
+        function loadLatestNews() {
+            fetch('/api/latest-news') // Endpoint for latest 3 news
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('news-container');
+                    container.innerHTML = ''; // Clear the container
+                    data.forEach(news => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        card.innerHTML = `
+                            <img src="${news.image}" alt="${news.title}" class="card-img">
+                            <div class="card-content">
+                                <h3>${news.title}</h3>
+                                <p class="categoria">Categoría: <span class="category">${news.category.name}</span></p>
+                                <p class="resumen">${news.summary}</p>
+                                <p class="fecha">${new Date(news.createdAt).toLocaleDateString()}</p>
+                                <a href="noticia/${news._id}" class="btn">Ver más</a>
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                })
+                .catch(error => console.error('Error loading latest news:', error));
+        }
+
+        function loadCompos() {
+            fetch('/api/compos')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('compos-container');
+                    container.innerHTML = ''; // Clear the container
+                    data.forEach(compo => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        card.innerHTML = `
+                            <img src="${compo.image}" alt="${compo.title}" class="card-img">
+                            <div class="card-content">
+                                <h3>${compo.title}</h3>
+                                <p class="categoria">Categoría: <span class="category">${compo.category}</span></p>
+                                <p class="resumen">${compo.summary}</p>
+                                <a href="compo/${compo._id}" class="btn">Ver más</a>
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                })
+                .catch(error => console.error('Error loading compos:', error));
+        }
+
+        // Initial load
+        loadLatestNews();
+        loadCompos();
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Noticias</title>
+    <link rel="stylesheet" href="/styles/admin.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="/admin/dashboard" class="nav-button">Dashboard</a>
+            <a href="/admin/settings" class="nav-button">Configuraciones</a>
+            <a href="/admin/change-credentials" class="nav-button change-credentials">Cambiar Credenciales</a>
+            <a href="/admin/logout" class="nav-button logout">Cerrar sesión</a>
+        </div>
+    </header>
+    <main>
+        <div class="news-management-container">
+            <h1>Gestionar Noticias</h1>
+
+            <!-- Formulario para crear una nueva noticia -->
+            <form action="/admin/news" method="post" enctype="multipart/form-data">
+                <fieldset>
+                    <legend>Crear Nueva Noticia</legend>
+
+                    <label for="news-title">Título de la Noticia:</label>
+                    <input type="text" id="news-title" name="title" placeholder="Ingrese el título de la noticia" required>
+
+                    <label for="news-category">Categoría:</label>
+                    <select id="news-category" name="category" required>
+                        <% categories.forEach(category => { %>
+                            <option value="<%= category._id %>"><%= category.name %></option>
+                        <% }) %>
+                    </select>
+
+                    <label for="news-summary">Resumen:</label>
+                    <textarea id="news-summary" name="summary" placeholder="Escriba el resumen de la noticia" rows="4" required></textarea>
+
+                    <label for="news-content">Contenido:</label>
+                    <textarea id="news-content" name="content" placeholder="Escriba el contenido de la noticia" rows="10" required></textarea>
+
+                    <label for="news-image-url">Imagen URL (opcional):</label>
+                    <input type="text" id="news-image-url" name="imageUrl" placeholder="Ingrese la URL de la imagen">
+
+                    <label for="news-image-file">O suba una imagen:</label>
+                    <input type="file" id="news-image-file" name="image" accept="image/*">
+
+                    <button type="submit" class="btn btn-primary">Crear Noticia</button>
+                </fieldset>
+            </form>
+
+            <!-- Listado de noticias existentes para editar o eliminar -->
+            <section class="existing-news">
+                <h2>Noticias Existentes</h2>
+                <ul>
+                    <% news.forEach(item => { %>
+                        <li class="news-item">
+                            <h3><%= item.title %></h3>
+                            <p><strong>Categoría:</strong> <%= item.category.name %></p>
+                            <p><strong>Resumen:</strong> <%= item.summary ? item.summary.substring(0, 100) + '...' : 'No hay resumen disponible' %></p>
+                            <p><strong>Contenido:</strong> <%= item.content ? item.content.substring(0, 100) + '...' : 'No hay contenido disponible' %></p>
+                            <% if (item.image) { %>
+                                <img src="/uploads/<%= item.image.split('/').pop() %>" alt="<%= item.title %>" class="news-image">
+                            <% } %>
+                            <div class="news-actions">
+                                <a href="/admin/news/edit/<%= item._id %>" class="btn btn-secondary">Editar</a>
+                                <form action="/admin/news/delete/<%= item._id %>" method="post" class="inline-form">
+                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </li>
+                    <% }) %>
+                </ul>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

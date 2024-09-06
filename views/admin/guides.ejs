@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Guías</title>
+    <link rel="stylesheet" href="/styles/admin.css">
+</head>
+<body>
+    <header>
+        <h1>Gestión de Guías</h1>
+        <div class="header-container">
+            <a href="/admin/dashboard" class="nav-button">Dashboard</a>
+            <a href="/admin/news" class="nav-button">Noticias</a>
+            <a href="/admin/guides" class="nav-button">Guías</a>
+            <a href="/admin/settings" class="nav-button">Configuraciones</a>
+            <a href="/admin/logout" class="nav-button logout">Cerrar sesión</a>
+        </div>
+    </header>
+
+    <main class="guides-container">
+        <h2>Añadir Nueva Guía</h2>
+        <form action="/admin/guides" method="post" class="settings-form">
+            <label for="nombre">Nombre de la guía:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="videoURL">URL del video de YouTube:</label>
+            <input type="url" id="videoURL" name="videoURL" required>
+
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+
+            <label for="detalles">Detalles:</label>
+            <textarea id="detalles" name="detalles" rows="4"></textarea>
+
+            <button type="submit">Añadir Guía</button>
+        </form>
+
+        <h2>Guías Existentes</h2>
+        <div class="guides-list">
+            <% guides.forEach(guide => { %>
+                <div class="guide-card">
+                    <h3><%= guide.nombre %></h3>
+                    <p><%= guide.descripcion %></p>
+                    <a href="<%= guide.videoURL %>" target="_blank" class="nav-button">Ver Video</a>
+                    <form action="/admin/guides/delete/<%= guide._id %>" method="post">
+                        <button type="submit" class="delete-button">Eliminar</button>
+                    </form>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 TFTHub. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

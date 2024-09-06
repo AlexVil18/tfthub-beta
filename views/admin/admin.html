@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - TFTHub</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="admin.html">Administración</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="admin-noticias">
+            <h2>Administrar Noticias</h2>
+            <form id="news-form">
+                <h3>Agregar Noticia</h3>
+                <input type="text" id="news-title" placeholder="Título" required>
+                <input type="text" id="news-category" placeholder="Categoría" required>
+                <textarea id="news-summary" placeholder="Resumen" required></textarea>
+                <input type="file" id="news-image" accept="image/*" required>
+                <button type="submit">Agregar Noticia</button>
+            </form>
+            <div id="news-list">
+                <!-- List of news items will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <section id="admin-compos">
+            <h2>Administrar Compos</h2>
+            <form id="compos-form">
+                <h3>Agregar Compo</h3>
+                <input type="text" id="compos-title" placeholder="Título" required>
+                <input type="text" id="compos-category" placeholder="Categoría" required>
+                <textarea id="compos-summary" placeholder="Resumen" required></textarea>
+                <input type="file" id="compos-image" accept="image/*" required>
+                <button type="submit">Agregar Compo</button>
+            </form>
+            <div id="compos-list">
+                <!-- List of compos items will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        document.getElementById('news-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('news-title').value;
+            const category = document.getElementById('news-category').value;
+            const summary = document.getElementById('news-summary').value;
+            const image = document.getElementById('news-image').files[0];
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('category', category);
+            formData.append('summary', summary);
+            formData.append('image', image);
+
+            fetch('/api/news', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  socket.emit('news:update'); // Notify the client to refresh news
+              }).catch(err => console.log(err));
+        });
+
+        document.getElementById('compos-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('compos-title').value;
+            const category = document.getElementById('compos-category').value;
+            const summary = document.getElementById('compos-summary').value;
+            const image = document.getElementById('compos-image').files[0];
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('category', category);
+            formData.append('summary', summary);
+            formData.append('image', image);
+
+            fetch('/api/compos', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  socket.emit('compos:update'); // Notify the client to refresh compos
+              }).catch(err => console.log(err));
+        });
+
+        function loadItems() {
+            fetch('/api/news')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('news-list');
+                    container.innerHTML = ''; // Clear the container
+                    data.forEach(news => {
+                        const item = document.createElement('div');
+                        item.className = 'admin-item';
+                        item.innerHTML = `
+                            <h4>${news.title}</h4>
+                            <p>Categoria: ${news.category}</p>
+                            <p>${news.summary}</p>
+                            <button onclick="deleteItem('news', '${news._id}')">Eliminar</button>
+                        `;
+                        container.appendChild(item);
+                    });
+                });
+
+            fetch('/api/compos')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('compos-list');
+                    container.innerHTML = ''; // Clear the container
+                    data.forEach(compo => {
+                        const item = document.createElement('div');
+                        item.className = 'admin-item';
+                        item.innerHTML = `
+                            <h4>${compo.title}</h4>
+                            <p>Categoria: ${compo.category}</p>
+                            <p>${compo.summary}</p>
+                            <button onclick="deleteItem('compos', '${compo._id}')">Eliminar</button>
+                        `;
+                        container.appendChild(item);
+                    });
+                });
+        }
+
+        function deleteItem(type, id) {
+            fetch(`/api/${type}/${id}`, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(() => {
+                    socket.emit(`${type}:update`); // Notify the client to refresh items
+                }).catch(err => console.log(err));
+        }
+
+        loadItems(); // Initial load of items
+    </script>
+</body>
+</html>
+

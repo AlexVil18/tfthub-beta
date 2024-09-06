@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración del Sitio</title>
+    <link rel="stylesheet" href="/styles/admin.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="/admin/dashboard" class="nav-button">Dashboard</a>
+            <a href="/admin/settings" class="nav-button">Configuraciones</a>
+            <a href="/admin/change-credentials" class="nav-button">Cambiar Credenciales</a>
+            <a href="/admin/logout" class="nav-button">Cerrar Sesión</a>
+        </div>
+    </header>
+    <main>
+        <div class="settings-container">
+            <h1>Configuración del Sitio</h1>
+            
+            <section class="settings-section">
+                <h2>Ajustes del Sitio</h2>
+                <form action="/admin/settings" method="post" class="settings-form">
+                    <fieldset>
+                        <legend>Información del Sitio</legend>
+                        <label for="site-name">Nombre del Sitio:</label>
+                        <input type="text" id="site-name" name="siteName" value="<%= siteName %>" placeholder="Ingrese nombre del sitio">
+                        <button type="submit" class="btn btn-primary">Guardar Ajustes</button>
+                    </fieldset>
+                </form>
+            </section>
+
+            <section class="settings-section">
+                <h2>Categorías Existentes</h2>
+                <ul class="category-list">
+                    <% categories.forEach(category => { %>
+                        <li class="category-item">
+                            <form action="/admin/settings/categories/<%= category._id %>" method="post" class="category-form">
+                                <input type="text" name="categoryName" value="<%= category.name %>" required>
+                                <button type="submit" class="btn btn-primary">Actualizar Categoría</button>
+                            </form>
+                            <form action="/admin/settings/categories/<%= category._id %>" method="post" class="category-form">
+                                <input type="hidden" name="_method" value="delete">
+                                <button type="submit" class="btn btn-danger">Eliminar Categoría</button>
+                            </form>
+                        </li>
+                    <% }) %>
+                </ul>
+            </section>
+
+            <section class="settings-section">
+                <h2>Añadir Nueva Categoría</h2>
+                <form action="/admin/settings/categories" method="post" class="category-form">
+                    <label for="new-category-name">Nombre de la Categoría:</label>
+                    <input type="text" id="new-category-name" name="categoryName" required>
+                    <button type="submit" class="btn btn-primary">Añadir Categoría</button>
+                </form>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

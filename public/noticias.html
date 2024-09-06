@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticias - TFTHub</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="compos.html">Compos</a></li>
+                <li><a href="guias.html">Guías</a></li>
+                <li><a href="redes.html">Redes</a></li>
+            </ul>
+        </nav>
+        <div class="logo-titulo">
+            <img src="logo.png" alt="Logo TFTHub" class="logo">
+            <div class="titulo-bienvenida">
+                <h1>Noticias</h1>
+                <p>Últimas actualizaciones y noticias sobre TFT</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="noticias">
+            <h2>Noticias Recientes</h2>
+            <div id="news-container" class="cards-container">
+                <!-- News cards will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 TFTHub. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('news:update', () => {
+            loadNews(); // Function to refresh all news from server
+        });
+
+        function loadNews() {
+            fetch('/api/news')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('news-container');
+                    container.innerHTML = ''; // Clear the container
+                    if (data.length === 0) {
+                        container.innerHTML = '<p>No hay noticias disponibles.</p>';
+                    } else {
+                        data.forEach(news => {
+                            const card = document.createElement('div');
+                            card.className = 'card';
+                            card.innerHTML = `
+                                <img src="${news.image}" alt="${news.title}" class="card-img">
+                                <div class="card-content">
+                                    <h3>${news.title}</h3>
+                                    <p class="categoria">Categoría: <span class="category">${news.category.name}</span></p>
+                                    <p class="resumen">${news.summary}</p>
+                                    <p class="fecha">${new Date(news.createdAt).toLocaleDateString()}</p>
+                                    <a href="noticia/${news._id}" class="btn">Leer más</a>
+                                </div>
+                            `;
+                            container.appendChild(card);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading news:', error);
+                    const container = document.getElementById('news-container');
+                    container.innerHTML = '<p>Hubo un problema al cargar las noticias.</p>';
+                });
+        }
+
+        // Initial load
+        loadNews();
+    </script>
+</body>
+</html>

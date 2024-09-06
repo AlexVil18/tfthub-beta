@@ -1,0 +1,346 @@
+/* Estilo general del cuerpo */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo del menú de navegación */
+nav {
+    background-color: #5c4033;
+    width: 100%;
+}
+
+.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.menu li {
+    margin: 0 15px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2em;
+    padding: 15px 20px;
+    display: block;
+}
+
+.menu a:hover {
+    background-color: #bc8f5c;
+    border-radius: 4px;
+}
+
+/* Estilo del logo y título */
+.logo-titulo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+/* Estilo de bienvenida */
+.titulo-bienvenida h1 {
+    font-size: 2.5em;
+    color: #5c4033;
+    margin-bottom: 10px;
+}
+
+.titulo-bienvenida p {
+    font-size: 1.2em;
+    color: #bc8f5c;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Estilo para las tarjetas de noticias */
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card {
+    background-color: white;
+    border: 1px solid #dcc392;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 15px;
+}
+
+.card h3 {
+    font-size: 1.3em;
+    margin: 0 0 10px;
+    color: #5c4033;
+}
+
+.card .categoria {
+    font-weight: bold;
+    color: #bc8f5c;
+    margin-bottom: 10px;
+}
+
+.card .resumen {
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.card .fecha {
+    font-size: 0.8em;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    color: white;
+    background-color: #bc8f5c;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #5c4033;
+}
+
+/* Estilo para botones de sección */
+button {
+    background-color: #bc8f5c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 4px;
+    margin: 10px auto;
+    display: block;
+}
+
+button:hover {
+    background-color: #5c4033;
+}
+
+/* Estilo del footer */
+footer {
+    background-color: #5c4033;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+}
+
+/* Estilos para la página de noticias */
+#noticias {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+#noticias h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #5c4033;
+    text-align: center;
+}
+
+/* Estilos para la página de noticia individual */
+#noticia {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #dcc392;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.noticia-img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.noticia-content {
+    font-family: 'Georgia', serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+.noticia-content .categoria {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #bc8f5c;
+    margin-bottom: 15px;
+}
+
+.noticia-content .category {
+    background-color: #f0e6d9;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.noticia-content .resumen {
+    font-size: 1.3em;
+    font-style: italic;
+    margin-bottom: 20px;
+    color: #5c4033;
+}
+
+.noticia-content .contenido {
+    font-size: 1.1em;
+    text-align: justify;
+}
+
+/* Mejoras generales */
+h1, h2, h3 {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Ajustes para mejorar la legibilidad en dispositivos móviles */
+@media (max-width: 768px) {
+    .card {
+        width: calc(100% - 40px);
+        margin: 0 20px;
+    }
+
+    .noticia-img {
+        height: 250px;
+    }
+
+    .noticia-content .resumen {
+        font-size: 1.2em;
+    }
+
+    .noticia-content .contenido {
+        font-size: 1em;
+    }
+}
+
+/* Estilos específicos para la sección de guías */
+#guias {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+#guias h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #5c4033;
+    text-align: center;
+}
+
+.guides-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.guide-card {
+    background-color: white;
+    border: 1px solid #dcc392;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: calc(33% - 20px);
+    margin: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    text-align: center;
+}
+
+.guide-card:hover {
+    transform: translateY(-5px);
+}
+
+.guide-thumbnail img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #dcc392;
+}
+
+.guide-info {
+    padding: 15px;
+}
+
+.guide-info h2 {
+    font-size: 1.3em;
+    margin: 10px 0;
+    color: #5c4033;
+}
+
+.guide-info p {
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.view-button {
+    display: inline-block;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    color: white;
+    background-color: #bc8f5c;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.view-button:hover {
+    background-color: #5c4033;
+}
+
+/* Ajustes para mejorar la legibilidad en dispositivos móviles */
+@media (max-width: 768px) {
+    .guide-card {
+        width: calc(100% - 40px);
+        margin: 0 20px;
+    }
+
+    .guide-thumbnail img {
+        height: 150px;
+    }
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="/styles/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Panel de Administración</h1>
+        <nav>
+            <ul>
+                <li><a href="/admin/noticias">Noticias</a></li>
+                <li><a href="/admin/compos">Compos</a></li>
+                <li><a href="/admin/categorias">Categorías</a></li>
+                <li><a href="/logout">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Bienvenido, <%= user.username %></h2>
+        <p>Aquí puedes administrar el contenido de TFTHub.</p>
+        <!-- Aquí se incluirán formularios y tablas para gestionar las noticias, compos, etc. -->
+    </main>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Noticia</title>
+    <link rel="stylesheet" href="/styles/admin.css">
+</head>
+<body>
+    <header>
+        <h1>Editar Noticia</h1>
+        <div class="header-container">
+            <a href="/admin/dashboard" class="nav-button">Dashboard</a>
+            <a href="/admin/settings" class="nav-button">Configuraciones</a>
+            <a href="/admin/change-credentials" class="nav-button change-credentials">Cambiar Credenciales</a>
+            <a href="/admin/logout" class="nav-button logout">Cerrar sesión</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="news-management-container">
+            <% if (message && message.length > 0) { %>
+                <div class="flash-message"><%= message %></div>
+            <% } %>
+
+            <form action="/admin/news/edit/<%= news._id %>" method="POST" enctype="multipart/form-data">
+                <fieldset>
+                    <legend>Editar Noticia</legend>
+
+                    <label for="title">Título de la Noticia:</label>
+                    <input type="text" name="title" id="title" value="<%= news.title %>" required>
+
+                    <label for="category">Categoría:</label>
+                    <select name="category" id="category" required>
+                        <% categories.forEach(category => { %>
+                            <option value="<%= category._id %>" <%= news.category._id.toString() === category._id.toString() ? 'selected' : '' %>><%= category.name %></option>
+                        <% }) %>
+                    </select>
+
+                    <label for="summary">Resumen:</label>
+                    <textarea name="summary" id="summary" rows="5" required><%= news.summary %></textarea>
+
+                    <label for="image">Imagen (opcional):</label>
+                    <input type="file" name="image" id="image" accept="image/*">
+                    <% if (news.image) { %>
+                        <p>Imagen Actual: <img src="/uploads/<%= news.image.split('/').pop() %>" alt="Imagen de la Noticia" class="news-image" width="100"></p>
+                    <% } %>
+
+                    <button type="submit" class="btn btn-primary">Actualizar Noticia</button>
+                </fieldset>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

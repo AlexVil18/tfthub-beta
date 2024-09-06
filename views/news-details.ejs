@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Noticia</title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <header>
+        <h1>Detalles de la Noticia</h1>
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="/news">Noticias</a>
+            <a href="/admin/dashboard">Panel de Administración</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="news-details-container">
+            <% if (news) { %>
+                <article>
+                    <h2><%= news.title %></h2>
+                    <p><strong>Categoría:</strong> <%= news.category.name %></p>
+                    <% if (news.image) { %>
+                        <img src="/uploads/<%= news.image.split('/').pop() %>" alt="Imagen de la Noticia" class="news-image">
+                    <% } %>
+                    <p><strong>Resumen:</strong></p>
+                    <p><%= news.summary %></p>
+                </article>
+            <% } else { %>
+                <p>No se encontró la noticia.</p>
+            <% } %>
+        </div>
+    </main>
+</body>
+</html>
