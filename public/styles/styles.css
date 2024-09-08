@@ -1,16 +1,30 @@
-/* Estilo general del cuerpo */
+/* Variables globales */
+:root {
+    --primary-color: #5c4033;
+    --secondary-color: #bc8f5c;
+    --background-color: #f9f9f9;
+    --text-color: #333;
+    --border-color: #dcc392;
+}
+
+/* Estilos generales */
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #f9f9f9;
+    color: var(--text-color);
+    background-color: var(--background-color);
     margin: 0;
     padding: 0;
 }
 
-/* Estilo del menú de navegación */
+h1, h2, h3 {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: var(--primary-color);
+}
+
+/* Navegación */
 nav {
-    background-color: #5c4033;
+    background-color: var(--primary-color);
     width: 100%;
 }
 
@@ -32,14 +46,15 @@ nav {
     font-size: 1.2em;
     padding: 15px 20px;
     display: block;
+    transition: background-color 0.3s ease;
 }
 
-.menu a:hover {
-    background-color: #bc8f5c;
+.menu a:hover, .menu a.active {
+    background-color: var(--secondary-color);
     border-radius: 4px;
 }
 
-/* Estilo del logo y título */
+/* Logo y título */
 .logo-titulo {
     display: flex;
     flex-direction: column;
@@ -54,22 +69,21 @@ nav {
     margin-bottom: 15px;
 }
 
-/* Estilo de bienvenida */
+/* Títulos de bienvenida */
 .titulo-bienvenida h1 {
     font-size: 2.5em;
-    color: #5c4033;
     margin-bottom: 10px;
 }
 
 .titulo-bienvenida p {
     font-size: 1.2em;
-    color: #bc8f5c;
+    color: var(--secondary-color);
     font-style: italic;
     margin: 0;
 }
 
-/* Estilo para las tarjetas de noticias */
-.cards-container {
+/* Tarjetas (noticias, guías, etc.) */
+.cards-container, .guides-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -77,9 +91,9 @@ nav {
     padding: 20px;
 }
 
-.card {
+.card, .guide-card {
     background-color: white;
-    border: 1px solid #dcc392;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 300px;
@@ -87,107 +101,94 @@ nav {
     transition: transform 0.3s ease;
 }
 
-.card:hover {
+.card:hover, .guide-card:hover {
     transform: translateY(-5px);
 }
 
-.card-img {
+.card-img, .guide-thumbnail img {
     width: 100%;
     height: 200px;
     object-fit: cover;
 }
 
-.card-content {
+.card-content, .guide-info {
     padding: 15px;
 }
 
-.card h3 {
+.card h3, .guide-info h2 {
     font-size: 1.3em;
     margin: 0 0 10px;
-    color: #5c4033;
 }
 
-.card .categoria {
+.categoria {
     font-weight: bold;
-    color: #bc8f5c;
+    color: var(--secondary-color);
     margin-bottom: 10px;
 }
 
-.card .resumen {
+.resumen, .guide-info p {
     font-size: 0.9em;
     margin-bottom: 15px;
-    color: #333;
 }
 
-.card .fecha {
+.fecha {
     font-size: 0.8em;
     color: #777;
     margin-bottom: 10px;
 }
 
-.btn {
+/* Ajustes de imagen para las noticias */
+.news-content img {
+    max-width: 100%; /* La imagen no excederá el ancho del contenedor */
+    height: auto;   /* Mantiene la proporción de la imagen */
+    display: block; /* Elimina el espacio en línea alrededor de las imágenes */
+    margin: 0 auto; /* Centra la imagen dentro del contenedor */
+}
+
+/* Botones y enlaces interactivos */
+.btn,
+button,
+.view-button {
     display: inline-block;
-    padding: 8px 15px;
+    padding: 10px 20px;
     font-size: 0.9em;
     color: white;
-    background-color: #bc8f5c;
+    background-color: var(--secondary-color);
     border: none;
     border-radius: 4px;
     text-decoration: none;
     text-align: center;
-    transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-    background-color: #5c4033;
-}
-
-/* Estilo para botones de sección */
-button {
-    background-color: #bc8f5c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
     cursor: pointer;
-    font-size: 1em;
-    border-radius: 4px;
     margin: 10px auto;
-    display: block;
 }
 
-button:hover {
-    background-color: #5c4033;
+.btn:hover,
+button:hover,
+.view-button:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
 }
 
-/* Estilo del footer */
-footer {
-    background-color: #5c4033;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    width: 100%;
-}
-
-/* Estilos para la página de noticias */
-#noticias {
+/* Secciones específicas */
+#noticias, #guias {
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: var(--background-color);
 }
 
-#noticias h2 {
+#noticias h2, #guias h2 {
     font-size: 2em;
     margin-bottom: 20px;
-    color: #5c4033;
     text-align: center;
 }
 
-/* Estilos para la página de noticia individual */
+/* Noticia individual */
 #noticia {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
-    border: 1px solid #dcc392;
+    background-color: white;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -202,28 +203,19 @@ footer {
 
 .noticia-content {
     font-family: 'Georgia', serif;
-    color: #333;
     line-height: 1.6;
 }
 
 .noticia-content .categoria {
     font-size: 1.2em;
-    font-weight: bold;
-    color: #bc8f5c;
     margin-bottom: 15px;
-}
-
-.noticia-content .category {
-    background-color: #f0e6d9;
-    padding: 5px 10px;
-    border-radius: 4px;
 }
 
 .noticia-content .resumen {
     font-size: 1.3em;
     font-style: italic;
     margin-bottom: 20px;
-    color: #5c4033;
+    color: var(--primary-color);
 }
 
 .noticia-content .contenido {
@@ -231,14 +223,47 @@ footer {
     text-align: justify;
 }
 
-/* Mejoras generales */
-h1, h2, h3 {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+/* Redes sociales */
+.social-media-section {
+    padding: 20px;
+    text-align: center;
 }
 
-/* Ajustes para mejorar la legibilidad en dispositivos móviles */
+.social-media-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-media-item {
+    transition: transform 0.3s ease;
+    background-color: transparent;
+    padding: 0;
+}
+
+.social-media-logo {
+    width: 60px;
+    height: 60px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.social-media-item:hover .social-media-logo {
+    transform: scale(1.1);
+}
+
+/* Footer */
+footer {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
-    .card {
+    .card, .guide-card {
         width: calc(100% - 40px);
         margin: 0 20px;
     }
@@ -254,93 +279,50 @@ h1, h2, h3 {
     .noticia-content .contenido {
         font-size: 1em;
     }
-}
-
-/* Estilos específicos para la sección de guías */
-#guias {
-    padding: 20px;
-    background-color: #f9f9f9;
-}
-
-#guias h2 {
-    font-size: 2em;
-    margin-bottom: 20px;
-    color: #5c4033;
-    text-align: center;
-}
-
-.guides-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-}
-
-.guide-card {
-    background-color: white;
-    border: 1px solid #dcc392;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: calc(33% - 20px);
-    margin: 10px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    text-align: center;
-}
-
-.guide-card:hover {
-    transform: translateY(-5px);
-}
-
-.guide-thumbnail img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-bottom: 1px solid #dcc392;
-}
-
-.guide-info {
-    padding: 15px;
-}
-
-.guide-info h2 {
-    font-size: 1.3em;
-    margin: 10px 0;
-    color: #5c4033;
-}
-
-.guide-info p {
-    font-size: 0.9em;
-    margin-bottom: 15px;
-    color: #333;
-}
-
-.view-button {
-    display: inline-block;
-    padding: 8px 15px;
-    font-size: 0.9em;
-    color: white;
-    background-color: #bc8f5c;
-    border: none;
-    border-radius: 4px;
-    text-decoration: none;
-    text-align: center;
-    transition: background-color 0.3s ease;
-}
-
-.view-button:hover {
-    background-color: #5c4033;
-}
-
-/* Ajustes para mejorar la legibilidad en dispositivos móviles */
-@media (max-width: 768px) {
-    .guide-card {
-        width: calc(100% - 40px);
-        margin: 0 20px;
-    }
 
     .guide-thumbnail img {
         height: 150px;
     }
+}
+
+/* Estilos para páginas EJS */
+[data-ejs] .btn,
+[data-ejs] button,
+[data-ejs] .view-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 0.9em;
+    color: white;
+    background-color: var(--secondary-color);
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    margin: 10px auto;
+}
+
+[data-ejs] .btn:hover,
+[data-ejs] button:hover,
+[data-ejs] .view-button:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+[data-ejs] .social-media-item {
+    background-color: transparent;
+    padding: 0;
+}
+
+[data-ejs] .social-media-logo {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 0 auto;
+    transition: transform 0.3s ease;
+}
+
+[data-ejs] .social-media-item:hover .social-media-logo {
+    transform: scale(1.1);
 }

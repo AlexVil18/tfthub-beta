@@ -27,15 +27,17 @@ mongoose.connect('mongodb://localhost/tfthub')
     .catch(err => console.log(err));
 
 // Configurar multer para cargas de archivos
+
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'uploads'); // Carpeta sin 'public/'
+    destination: (req, file, cb) => {
+        cb(null, 'uploads'); // Carpeta donde se almacenan las imágenes
     },
-    filename: function(req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname));
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname); // Nombre del archivo
     }
 });
 const upload = multer({ storage: storage });
+
 
 // Middleware
 app.use(express.json());
@@ -78,18 +80,27 @@ const adminRoutes = require('./routes/admin');
 app.use('/admin', adminRoutes);
 
 // API para noticias, composiciones y guías
-app.post('/api/news', upload.single('image'), (req, res) => {
-    const { title, category, summary } = req.body;
+app.post('/admin/news', upload.single('image'), (req, res) => {
+    const { title, category, summary, content } = req.body;
     const image = req.file ? req.file.path : ''; // Ruta de la imagen cargada
 
-    const news = new News({ title, category, summary, image });
+    // Verificar que todos los campos requeridos estén presentes
+    if (!title || !category || !summary || !content) {
+        return res.status(400).json({ error: 'Todos los campos son requeridos.' });
+    }
+
+    const news = new News({ title, category, summary, content, image });
     news.save()
         .then(() => {
             io.emit('news:update'); // Emitir evento para actualizar las noticias
-            res.status(200).json({ message: 'Noticia creada correctamente' });
+            res.redirect('/admin/news'); // Redirigir después de la creación
         })
-        .catch(err => res.status(500).json({ error: err }));
+        .catch(err => {
+            console.error('Error creating news:', err);
+            res.status(500).json({ error: err.message });
+        });
 });
+
 
 app.post('/api/compos', upload.single('image'), (req, res) => {
     const { title, category, summary } = req.body;
@@ -201,6 +212,11 @@ app.get('/guia/:id', (req, res) => {  // Cambiado de '/guide/:id' a '/guia/:id'
             }
         })
         .catch(err => res.status(500).json({ error: err }));
+});
+
+// Ruta para la sección de redes sociales
+app.get('/redes', (req, res) => {
+    res.render('redes'); // Renderiza la vista de redes sociales 'redes.ejs'
 });
 
 // Inicializar Socket.io

@@ -28,11 +28,21 @@
 
     <main>
         <article id="noticia">
+            <!-- Imagen de la noticia -->
             <img src="/<%= news.image %>" alt="<%= news.title %>" class="noticia-img">
+            
+            <!-- Contenido de la noticia -->
             <div class="noticia-content">
+                <!-- Categoría resaltada -->
                 <p class="categoria">Categoría: <span class="category"><%= news.category.name %></span></p>
+                
+                <!-- Resumen estilizado -->
                 <p class="resumen"><%= news.summary %></p>
-                <div class="contenido"><%= news.content %></div>
+                
+                <!-- Contenido detallado de la noticia -->
+                <div class="contenido">
+                    <%- news.content %>
+                </div>
             </div>
         </article>
     </main>

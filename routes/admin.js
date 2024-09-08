@@ -9,9 +9,10 @@ const bcrypt = require('bcryptjs');
 const multer = require('multer'); // Para manejar archivos subidos
 
 // Configuración de multer para manejar las subidas de archivos
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads'); // Carpeta donde se almacenan las imágenes, sin el prefijo 'public/'
+        cb(null, 'uploads'); // Carpeta donde se almacenan las imágenes
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + '-' + file.originalname); // Nombre del archivo
@@ -41,7 +42,7 @@ router.get('/dashboard', (req, res) => {
 });
 
 // Ruta para cerrar sesión
-router.get('/logout', (req, res) => {
+router.get('/logout', (req, res, next) => {
     req.logout((err) => {
         if (err) return next(err);
         res.redirect('/admin/login');
@@ -68,9 +69,7 @@ router.get('/settings', async (req, res) => {
 router.post('/settings', (req, res) => {
     if (req.isAuthenticated()) {
         const { siteName } = req.body;
-
         console.log(`Nuevo nombre del sitio: ${siteName}`);
-
         req.flash('success', 'Ajustes guardados con éxito.');
         res.redirect('/admin/settings');
     } else {
@@ -145,22 +144,21 @@ router.get('/news', async (req, res) => {
     }
 });
 
-// Ruta para añadir una nueva noticia
+// Ruta para agregar nueva noticia
 router.post('/news', upload.single('image'), async (req, res) => {
-    if (req.isAuthenticated()) {
-        try {
-            const { title, category, summary, content } = req.body;
-            const image = req.file ? req.file.path : ''; // Ruta de la imagen cargada, ya sin 'public/'
-            const news = new News({ title, category, summary, content, image });
-            await news.save();
-            req.flash('success', 'Noticia añadida con éxito.');
-            res.redirect('/admin/news');
-        } catch (err) {
-            console.error(err);
-            res.status(500).send('Error al añadir la noticia');
-        }
-    } else {
-        res.redirect('/admin/login');
+    const { title, category, summary, content, imageUrl } = req.body;
+    try {
+        const newNews = new News({
+            title,
+            category,
+            summary,
+            content, // El contenido ya viene en formato HTML desde Quill
+            image: req.file ? req.file.path : imageUrl
+        });
+        await newNews.save();
+        res.redirect('/admin/news');
+    } catch (err) {
+        res.status(500).send(err.message);
     }
 });
 
@@ -180,20 +178,34 @@ router.post('/news/delete/:id', async (req, res) => {
     }
 });
 
-// Ruta para editar una noticia
 router.get('/news/edit/:id', async (req, res) => {
-    if (req.isAuthenticated()) {
-        try {
-            const news = await News.findById(req.params.id).populate('category');
-            const categories = await Category.find();
-            const message = req.flash('message') || ''; // Asigna un valor predeterminado en caso de que no haya mensaje
-            res.render('admin/edit-news', { news, categories, message });
-        } catch (err) {
-            console.error(err);
-            res.status(500).send('Error al obtener la noticia');
+    try {
+        const news = await News.findById(req.params.id).populate('category');
+        const categories = await Category.find(); // Obtén todas las categorías disponibles
+        if (!news) {
+            return res.status(404).send('Noticia no encontrada');
         }
-    } else {
-        res.redirect('/admin/login');
+        const message = req.flash('success') || req.flash('error'); // Obtén el mensaje flash si existe
+        res.render('edit-news', { news, categories, message });
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// Ruta para editar noticia existente
+router.post('/news/edit/:id', upload.single('image'), async (req, res) => {
+    const { title, category, summary, content, imageUrl } = req.body;
+    try {
+        const news = await News.findById(req.params.id);
+        news.title = title;
+        news.category = category;
+        news.summary = summary;
+        news.content = content; // Actualizar el contenido con el nuevo valor
+        news.image = req.file ? req.file.path : imageUrl || news.image;
+        await news.save();
+        res.redirect('/admin/news');
+    } catch (err) {
+        res.status(500).send(err.message);
     }
 });
 
@@ -282,12 +294,12 @@ router.post('/guides/delete/:id', async (req, res) => {
     }
 });
 
-// Ruta para editar una guía
+// Editar una guía
 router.get('/guides/edit/:id', async (req, res) => {
     if (req.isAuthenticated()) {
         try {
             const guide = await Guide.findById(req.params.id);
-            res.render('admin/edit-guide', { guide });
+            res.render('admin/editGuide', { guide });
         } catch (error) {
             console.error(error);
             res.status(500).send('Error al obtener la guía');
@@ -308,30 +320,6 @@ router.post('/guides/edit/:id', async (req, res) => {
         } catch (error) {
             console.error(error);
             res.status(500).send('Error al actualizar la guía');
-        }
-    } else {
-        res.redirect('/admin/login');
-    }
-});
-
-// Cambio de credenciales
-router.post('/change-credentials', async (req, res) => {
-    if (req.isAuthenticated()) {
-        const { username, newPassword } = req.body;
-        try {
-            const user = await User.findOne({ username: req.user.username });
-            if (user) {
-                user.password = await bcrypt.hash(newPassword, 10);
-                await user.save();
-                req.flash('success', 'Contraseña actualizada con éxito.');
-                res.redirect('/admin/settings');
-            } else {
-                req.flash('error', 'Usuario no encontrado.');
-                res.redirect('/admin/settings');
-            }
-        } catch (err) {
-            console.error(err);
-            res.status(500).send('Error al actualizar la contraseña');
         }
     } else {
         res.redirect('/admin/login');

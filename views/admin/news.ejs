@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionar Noticias</title>
     <link rel="stylesheet" href="/styles/admin.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"> <!-- Quill Styles -->
 </head>
 <body>
     <header>
@@ -20,7 +21,7 @@
             <h1>Gestionar Noticias</h1>
 
             <!-- Formulario para crear una nueva noticia -->
-            <form action="/admin/news" method="post" enctype="multipart/form-data">
+            <form action="/admin/news" method="post" enctype="multipart/form-data" onsubmit="return handleSubmit();">
                 <fieldset>
                     <legend>Crear Nueva Noticia</legend>
 
@@ -38,7 +39,10 @@
                     <textarea id="news-summary" name="summary" placeholder="Escriba el resumen de la noticia" rows="4" required></textarea>
 
                     <label for="news-content">Contenido:</label>
-                    <textarea id="news-content" name="content" placeholder="Escriba el contenido de la noticia" rows="10" required></textarea>
+                    <!-- Aquí va el editor Quill -->
+                    <div id="editor" style="height: 200px;"></div>
+                    <!-- Campo oculto para enviar el contenido -->
+                    <input type="hidden" id="news-content" name="content">
 
                     <label for="news-image-url">Imagen URL (opcional):</label>
                     <input type="text" id="news-image-url" name="imageUrl" placeholder="Ingrese la URL de la imagen">
@@ -75,5 +79,31 @@
             </section>
         </div>
     </main>
+
+    <!-- Scripts para Quill -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        var quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': '1' }, { 'header': '2' }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'image'],
+                    [{ 'align': [] }],
+                    ['clean'] // remove formatting button
+                ]
+            }
+        });
+
+        // Maneja el envío del formulario para capturar el contenido HTML de Quill
+        function handleSubmit() {
+            var content = document.querySelector('input[name=content]');
+            content.value = quill.root.innerHTML;
+            return true;
+        }
+    </script>
 </body>
 </html>
